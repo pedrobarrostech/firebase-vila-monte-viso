@@ -1,0 +1,32 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+
+table.dataTable thead th, table.dataTable thead td {
+    border-bottom: 0;
+}
+
+table.dataTable.no-footer {
+    border-bottom: 0;
+}
+
+label > input[type="search"], select {
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-image: none;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    border: 0;
+    padding: 0;
+    background: none;
+}
+
+.custom-control {
+    padding-left: 0.3rem;
+}

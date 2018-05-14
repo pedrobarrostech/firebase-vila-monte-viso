@@ -1,0 +1,81 @@
+<!--
+<div class="card mt-4">  
+    <h4 class="card-header mb-4">Adicionar horário</h4>
+      <div class="card-block">
+        <div class="container">
+          <form [formGroup]="addScheduleForm" (ngSubmit)="addSchedule(schedule)">
+              <div class="form-group">
+                  <label for="title">Descrição</label>
+                  <textarea class="form-control" name="title" formControlName="title" ></textarea>          
+              </div>
+
+              <div class="form-group">
+                <label for="start">Data início:</label>
+                <input class="form-control" placeholder="Data início" name="start" type="datetime-local" formControlName="start" />  
+              </div>
+
+              <div class="form-group">
+                <label for="end">Data fim:</label>
+                <input class="form-control" placeholder="Data fim" name="end" type="datetime-local" formControlName="end" />  
+              </div>
+
+              <div class="form-group">
+                <label for="price">Preço:</label>
+                <input class="form-control" placeholder="Preço" name="price" type="text" formControlName="price" />  
+              </div>
+                  
+              <div class="form-group">
+                <button class="btn btn-sm btn-primary" type="submit" [disabled]="!addScheduleForm.valid" >
+                    <i class="fa fa-floppy-o"></i> Salvar
+                </button>
+              </div>
+          </form>
+        </div>
+      </div>
+</div>
+
+<div class="card mt-4" *ngIf="!isLoading">
+  <h4 class="card-header">Horários ({{schedules.length}})</h4>
+  <div class="card-block">
+    <div class="container">
+      <div [hidden]="!infoMsg.body" class="alert alert-{{infoMsg.type}} alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        {{infoMsg.body}}
+      </div>
+      
+      <table class="table table-bordered table-striped mt-4">
+        <thead class="thead-default">
+          <tr>
+            <th>Descrição</th>
+            <th>Início</th>
+            <th>Fim</th>
+            <th>Preço</th>
+            <th align="center">Ações</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="schedules.length === 0">
+          <tr>
+            <td colspan="5">Não há horários agendados para esse cliente.</td>
+          </tr>  
+        </tbody>
+        <tbody>
+          <tr *ngFor="let schedule of schedules">
+            <td>{{ schedule.title }}</td>
+            <td>{{ schedule.start | date: 'dd/MM/yyyy @ h:mma' }}</td>
+            <td>{{ schedule.end   | date: 'dd/MM/yyyy @ h:mma' }}</td>
+            <td>{{ schedule.price | currency:'BRL':'symbol':'1.2-2' }}</td>
+            <td align="center">
+              <button class="btn btn-sm btn-danger" (click)="deleteSchedule(schedule)">
+                  <i class="fa fa-trash"></i>
+              </button>
+            </td>
+          </tr>  
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+-->

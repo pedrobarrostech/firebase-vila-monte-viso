@@ -1,0 +1,43 @@
+<div class="mt-4">
+  <p-chart #chart type="bar" [data]="data"></p-chart>
+</div>
+
+<div class="mt-4">
+
+  <div class="card" *ngIf="!isLoading">
+    <h4 class="card-header mb-4">Entrada/Saída ({{schedules.length}})</h4>
+    <div class="card-block">
+      <div class="container">
+        <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped">
+          <thead class="thead-default">
+            <tr>
+              <th>Descrição</th>
+              <th>Início</th>
+              <th>Fim</th>
+              <th>Preço</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="schedules.length === 0">
+            <tr>
+              <td colspan="4">Não há entradas/saídas para esse mês.</td>
+            </tr>
+          </tbody>
+          <tbody>
+            <tr *ngFor="let schedule of schedules">
+              <td>{{ schedule.title }}</td>
+              <td>{{ schedule.start | date: 'dd/MM/yyyy @ h:mma' }}</td>
+              <td>{{ schedule.end | date: 'dd/MM/yyyy @ h:mma' }}</td>
+              <td>{{ schedule.price | currency:'BRL':'symbol':'1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="info">
+          <h5>Total Entrada: {{ totalPositiveEntries | currency:'BRL':'symbol':'1.2-2'}}</h5>
+          <h5>Total Saída: {{ totalNegativeEntries | currency:'BRL':'symbol':'1.2-2'}}</h5>
+          <h2>Subtotal: {{ totalPositiveEntries + totalNegativeEntries | currency:'BRL':'symbol':'1.2-2'}}</h2>
+        </div>
+
+      </div>  
+    </div>
+  </div>

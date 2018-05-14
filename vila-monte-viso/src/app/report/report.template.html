@@ -1,0 +1,10 @@
+<div class="card mb-4" *ngFor="let year of years">
+  <h4 class="card-header"><a [routerLink]="['/relatorio-anual']" [queryParams]="{ year: year.year }">Relatórios {{ year.year}}</a></h4>
+  <div class="card-block">
+    <div *ngFor="let report of data">
+      <span *ngIf="report.count > 0 && report.year == year.year">
+        <a [routerLink]="['/relatorio-mensal']" [queryParams]="{ month: report.month, year: report.year }" class="nav-item nav-link">&#9679; {{ report.monthName }} </a>
+      </span>
+    </div>
+  </div>
+</div>

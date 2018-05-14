@@ -1,0 +1,75 @@
+<div class="card mt-4" *ngIf="!isLoading">
+    <h4 class="card-header mb-4">Messagens ({{messages.length}})</h4>
+    <div class="card-block">
+    <div class="container">
+        <div [hidden]="!infoMsg.body" class="alert alert-{{infoMsg.type}} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{infoMsg.body}}
+        </div>
+        <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped mb-4">
+            <thead class="thead-default">
+                <tr>
+                    <th width="10%">Título</th>
+                    <th width="20%">Assunto</th>
+                    <th width="20%">E-mail</th>
+                    <th width="20%">Telefone</th>
+                    <th width="20%" align="center">Ações</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="messages.length === 0">
+                <tr>
+                <td colspan="5">Não há mensagens cadastradas.</td>
+                </tr>  
+            </tbody>
+            <tbody *ngIf="!isEditing">
+                <tr *ngFor="let message of messages">
+                    <td>{{message.title}}</td>
+                    <td>{{message.subject}}</td>
+                    <td>{{message.email}}</td>
+                    <td>{{message.phone}}</td>
+                    <td align="center">
+                        <button class="btn btn-sm btn-warning text-white" (click)="enableView(message)">
+                            <i class="fa fa-eye"></i> Visualizar
+                        </button> 
+                        <button class="btn btn-sm btn-danger" (click)="deleteMessage(message)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>  
+            </tbody>
+            <tbody *ngIf="isEditing">
+                <tr>
+                <td colspan="5">
+                    <form #form="ngForm">
+                        <div class="form-group">
+                                <label for="title">Título</label>
+                            <input class="form-control" type="text" name="title" placeholder="Título" [(ngModel)]="message.title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Assunto</label>
+                            <input class="form-control" placeholder="Assunto" name="subject" type="text" [(ngModel)]="message.subject" />
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefone/Celular</label>
+                            <input class="form-control" placeholder="Telefone/Celular" name="phone" type="text" [(ngModel)]="message.phone" /> 
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail</label>
+                            <input class="form-control" placeholder="E-mail" name="email" type="text" [(ngModel)]="message.email" />
+                        </div>
+                        <div class="form-group">
+                            <label for="info">Mensagem</label>
+                            <textarea class="form-control" name="message" [(ngModel)]="message.message" ></textarea>          
+                        </div>
+                    </form>
+                    <button class="btn btn-sm btn-warning" (click)="cancelView()"><i class="fa fa-times"></i> Cancelar</button>
+                    
+                </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
