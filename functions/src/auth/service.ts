@@ -10,80 +10,26 @@ import {
     UserEntity
 } from "../user/model"
 
-import { AuthRepository } from "./repository";
+import { UserRepository } from "../user/repository";
 import { AuthNotFoundError } from "./error"
-
+import config from "../config"
+import jwt from "express-jwt"
 @Service()
 export class AuthService {
 
     @Inject()
-    userRepository: AuthRepository;
+    userRepository: UserRepository;
 
-    async findAll(): Promise<UserEntity[]> {
+    async login(user): Promise<void> {
+            const data = await this.userRepository.findById("06316df2-72a2-4a9c-b03b-2ffff058af18");
+            console.log(data)
 
-        const query = await this.userRepository.findAll();
+            if (user.password === 250494) {
+                const token = jwt.sign({
+                    username: 'data.username'
+                }, config.jwtSecret)
+            }
 
-        const users = new Array<UserEntity>()
-
-        query.forEach((document) => {
-
-            const doc = document.data();
-
-            users.push(
-                new UserEntity(doc.id, doc.username, doc.password)
-            );
-
-        });
-
-        return users;
-    }
-
-    async findById(id: string): Promise<UserEntity> {
-
-        const document = await this.find(id);
-
-        const data = document.data();
-
-        return new UserEntity(data.id, data.username, data.password);
-
-    }
-
-    async save(user: User): Promise<UserEntity> {
-
-        const id = await this.userRepository.save(
-            user.username,
-            user.password
-        );
-
-        return new UserEntity(id, user.username, user.password);
-    }
-
-    async update(id: string, user: User): Promise<UserEntity> {
-
-        await this.userRepository.update(
-            id,
-            user.username,
-            user.password
-        );
-
-        return new UserEntity(id, user.username, user.password);
-    }
-
-    async delete(id: string): Promise<void> {
-
-        await this.find(id);
-
-        return this.userRepository.delete(id);
-    }
-
-    private async find(id: string): Promise<firestore.DocumentSnapshot> {
-
-        const document = await this.userRepository.findById(id);
-
-        if (!document.exists)
             throw new AuthNotFoundError();
-
-        return document;
     }
-
 }

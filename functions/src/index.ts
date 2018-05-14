@@ -7,8 +7,14 @@ import {
     UserTriggerFirestore
 } from "./user"
 
+import {
+    authApp,
+    AuthTriggerFirestore
+} from "./auth"
+
 admin.initializeApp(functions.config().firebase);
 
+export const auth = functions.https.onRequest(authApp);
 export const users = functions.https.onRequest(userApp);
 
 export const userOnnWrite = functions.firestore.document(UserTriggerFirestore.path).onWrite(UserTriggerFirestore.onWrite);
