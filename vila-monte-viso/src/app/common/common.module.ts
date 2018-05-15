@@ -2,12 +2,14 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DataTablesModule } from 'angular-datatables';
 import { RadioButtonModule } from 'primeng/primeng';
 
-
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database-deprecated';
 
 import { ClientService } from '../common/_services/client.service';
 import { ScheduleService } from '../common/_services/schedule.service';
@@ -23,13 +25,16 @@ import { UserService } from '../common/_services/user.service';
 
 const MODULES = [
   HttpClientModule,
+  HttpModule,
   RouterModule,
   BrowserModule,
   FormsModule,
   ReactiveFormsModule,
   BrowserAnimationsModule,
   DataTablesModule,
-  RadioButtonModule
+  RadioButtonModule,
+  AngularFireAuthModule,
+  AngularFireDatabaseModule
 ];
 
 const PIPES = [

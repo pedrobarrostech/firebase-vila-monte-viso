@@ -6,7 +6,7 @@ import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-
+import * as firebase from 'firebase/app';
 @Injectable()
 export class UserService {
   private actionUrl = 'https://us-central1-vila-monte-viso-43dac.cloudfunctions.net/users/';
@@ -15,10 +15,12 @@ export class UserService {
 
   constructor(protected _http: HttpClient) { }
 
-  getAll (): Observable<User[]> {
+  async getAll () {
+    const token = await firebase.auth().currentUser.getIdToken();
+    this.headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': token});
     return this._http.get(this.actionUrl).pipe(
-                    map(this.extractData)
-                    // .catch(this.handleError)
+      map(this.extractData)
+      // .catch(this.handleError)
     );
   }
 

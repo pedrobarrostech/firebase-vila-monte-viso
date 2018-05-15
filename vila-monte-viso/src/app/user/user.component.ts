@@ -40,11 +40,10 @@ export class UserComponent implements OnInit {
   }
 
   getUsers() {
-    this._userService.getAll().subscribe(
-      data => this.users = data,
-      error => console.log(error),
-      () => this.isLoading = false
-    );
+    this._userService.getAll().then(
+      data => console.log(data)
+    ).catch(
+      error => console.log(error));
   }
 
   enableView(user) {

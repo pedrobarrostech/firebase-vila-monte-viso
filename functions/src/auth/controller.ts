@@ -9,7 +9,7 @@ import {
 
 import { Inject } from "typedi";
 
-import { Auth } from "./model"
+import { User } from "../user/model"
 import { AuthNotFoundError } from "./error"
 import { AuthService } from "./service";
 
@@ -20,8 +20,8 @@ export class AuthController {
     authService: AuthService;
 
     @Post()
-    login(@Body() auth: Auth) {
-        return this.authService.login(auth);
+    login(@Body() user: User) {
+        return this.authService.login(user);
     }
 
 }

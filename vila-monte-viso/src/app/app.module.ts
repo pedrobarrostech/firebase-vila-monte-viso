@@ -18,7 +18,10 @@ import { ProductModule } from './product/product.module';
 import { ServiceModule } from './service/service.module';
 import { NoContentModule } from './no-content/no-content.module';
 import { UserModule } from './user/user.module';
+import { AngularFireModule } from 'angularfire2';
+import { environment } from '../environments/environment';
 import * as $ from 'jquery';
+
 
 @NgModule({
   declarations: [
@@ -42,7 +45,8 @@ import * as $ from 'jquery';
     ProductModule,
     ServiceModule,
     NoContentModule,
-    UserModule
+    UserModule,
+    AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [
   ]

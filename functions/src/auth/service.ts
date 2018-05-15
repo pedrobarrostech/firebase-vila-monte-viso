@@ -20,16 +20,18 @@ export class AuthService {
     @Inject()
     userRepository: UserRepository;
 
-    async login(user): Promise<void> {
-            const data = await this.userRepository.findById("06316df2-72a2-4a9c-b03b-2ffff058af18");
-            console.log(data)
+    async login(user): Promise<firestore.DocumentSnapshot> {
+        const data = await this.userRepository.findById("06316df2-72a2-4a9c-b03b-2ffff058af18");
 
-            if (user.password === 250494) {
-                const token = jwt.sign({
-                    username: 'data.username'
-                }, config.jwtSecret)
-            }
+        if (user.password === 250494) {
+            const token = jwt.sign({
+                username: 'data.username'
+            }, config.jwtSecret)
+        }
 
+        if (!data.exists)
             throw new AuthNotFoundError();
+
+        return data;
     }
 }
