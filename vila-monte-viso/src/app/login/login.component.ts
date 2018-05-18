@@ -2,7 +2,7 @@
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../common/_services/authentication.service';
-
+import * as firebase from 'firebase';
 @Component({
     styleUrls: [ './login.style.css' ],
     templateUrl: './login.component.html'
@@ -25,8 +25,11 @@ export class LoginComponent implements OnInit {
         this.loading = true;
         this._authenticationService.login(this.model.username, this.model.password)
           .then((result) => {
-            localStorage.setItem('currentUser', JSON.stringify({ credential: result.credential }));
-            console.log(result.credential);
+            firebase.auth().currentUser.getIdToken().then((token) => {
+              console.log(token);
+              localStorage.setItem('currentUser', JSON.stringify({ token }));
+            });
+
             // if (result === true) {
             //   this.router.navigate(['/']);
             // } else {

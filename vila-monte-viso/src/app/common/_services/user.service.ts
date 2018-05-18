@@ -9,10 +9,11 @@ import { map } from 'rxjs/operators';
 import { ajax } from 'rxjs/observable/dom/ajax';
 import { AjaxResponse } from 'rxjs/observable/dom/AjaxObservable';
 import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase';
 @Injectable()
 export class UserService {
   private actionUrl = 'https://us-central1-vila-monte-viso-43dac.cloudfunctions.net/users/';
-  private token = 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).credential.accessToken;
+  private token = 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).token;
   private headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': this.token});
   private options = { headers: this.headers };
 
@@ -24,18 +25,6 @@ export class UserService {
     //   map(this.extractData)
     //   // .catch(this.handleError)
     // );
-  }
-
-  next(response: AjaxResponse): string | null {
-    let url: string | null = null;
-    const link = response.xhr.getResponseHeader('Link');
-    if (link) {
-      const match = link.match(/<([^>]+)>;\s*rel="next"/);
-      if (match) {
-        [, url] = match;
-      }
-    }
-    return url;
   }
 
   add (data: User) {

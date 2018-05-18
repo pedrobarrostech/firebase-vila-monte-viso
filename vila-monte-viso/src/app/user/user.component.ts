@@ -42,7 +42,7 @@ export class UserComponent implements OnInit {
 
   getUsers() {
     this._userService.getAll().subscribe(
-      data => console.log(data),
+      data => this.users = data,
       error => console.log(error),
       () => this.isLoading = false
     );
