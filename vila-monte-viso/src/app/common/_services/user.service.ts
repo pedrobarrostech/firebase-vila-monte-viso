@@ -6,30 +6,45 @@ import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import * as firebase from 'firebase/app';
+import { ajax } from 'rxjs/observable/dom/ajax';
+import { AjaxResponse } from 'rxjs/observable/dom/AjaxObservable';
+import { AngularFireAuth } from 'angularfire2/auth';
 @Injectable()
 export class UserService {
   private actionUrl = 'https://us-central1-vila-monte-viso-43dac.cloudfunctions.net/users/';
-  private headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+  private token = 'Bearer ' + JSON.parse(localStorage.getItem('currentUser')).credential.accessToken;
+  private headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': this.token});
   private options = { headers: this.headers };
 
   constructor(protected _http: HttpClient) { }
 
-  async getAll () {
-    const token = await firebase.auth().currentUser.getIdToken();
-    this.headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': token});
-    return this._http.get(this.actionUrl).pipe(
-      map(this.extractData)
-      // .catch(this.handleError)
-    );
+  getAll (): Observable<any> {
+    return this._http.get(this.actionUrl, this.options);
+    // .pipe(
+    //   map(this.extractData)
+    //   // .catch(this.handleError)
+    // );
   }
 
-  add (data: User): Observable<User> {
+  next(response: AjaxResponse): string | null {
+    let url: string | null = null;
+    const link = response.xhr.getResponseHeader('Link');
+    if (link) {
+      const match = link.match(/<([^>]+)>;\s*rel="next"/);
+      if (match) {
+        [, url] = match;
+      }
+    }
+    return url;
+  }
+
+  add (data: User) {
     const body = JSON.stringify(data);
-    return this._http.post(this.actionUrl, body, this.options).pipe(
-                    map(this.extractData)
-                    // ,throwError(this.handleError)
-    );
+    return this._http.post(this.actionUrl, body, this.options);
+    // .pipe(
+    //                 map(this.extractData)
+    //                 // ,throwError(this.handleError)
+    // );
 
   }
 

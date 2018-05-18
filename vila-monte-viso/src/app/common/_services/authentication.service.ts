@@ -19,8 +19,8 @@ export class AuthenticationService {
     private userDetails: firebase.User = null;
 
     constructor(private _firebaseAuth: AngularFireAuth, private router: Router, private _http: HttpClient) {
-      // const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      // this.token = currentUser && currentUser.token;
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      this.token = currentUser && currentUser.token;
 
       this.user = _firebaseAuth.authState;
 
