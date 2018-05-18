@@ -21,6 +21,7 @@ import { UserModule } from './user/user.module';
 import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
 import * as $ from 'jquery';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import * as $ from 'jquery';
     ServiceModule,
     NoContentModule,
     UserModule,
-    AngularFireModule.initializeApp(environment.firebase)
+    AngularFireModule.initializeApp(environment.firebase),
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
   ]
