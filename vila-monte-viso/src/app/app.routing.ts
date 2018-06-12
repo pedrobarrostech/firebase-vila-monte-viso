@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
   imports: [
     RouterModule.forRoot([
       { path: '', redirectTo: '/login', pathMatch: 'full' }
-    ])
+    ], {onSameUrlNavigation: 'reload'})
   ]
 })
 export class AppRouting { }

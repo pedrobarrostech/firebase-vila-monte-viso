@@ -28,14 +28,19 @@ export class LoginComponent implements OnInit {
             firebase.auth().currentUser.getIdToken().then((token) => {
               console.log(token);
               localStorage.setItem('currentUser', JSON.stringify({ token }));
-            });
 
-            // if (result === true) {
-            //   this.router.navigate(['/']);
-            // } else {
-            //     this.error = 'Username ou senha estão incorretos.';
-            //     this.loading = false;
-            // }
+              if (result === true) {
+                this.router.navigateByUrl('users')
+                      .then(() => {
+                        this.router.navigated = false;
+                        this.router.navigate([this.router.url]);
+                        window.location.reload();
+                      });
+              } else {
+                  this.error = 'Username ou senha estão incorretos.';
+                  this.loading = false;
+              }
+            });
           });
     }
 }

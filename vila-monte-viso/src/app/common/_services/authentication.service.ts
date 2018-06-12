@@ -28,7 +28,7 @@ export class AuthenticationService {
         (user) => {
           if (user) {
             this.userDetails = user;
-            console.log(this.userDetails);
+            // console.log(this.userDetails);
           } else {
             this.userDetails = null;
           }
@@ -37,13 +37,34 @@ export class AuthenticationService {
     }
 
     get isLoggedIn() {
-        return this.loggedIn.asObservable();
+      return this.loggedIn.asObservable();
     }
 
     login(username, password) {
       return this._firebaseAuth.auth.signInWithPopup(
         new firebase.auth.GoogleAuthProvider()
-      );
+      ).then(function(result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const token = result.credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        localStorage.setItem('currentUser', JSON.stringify({ username: user, token: token }));
+        // this.token = token;
+        // this.loggedIn.next(true);
+        return true;
+        // ...
+      }).catch(function(error) {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        const credential = error.credential;
+        // this.loggedIn.next(false);
+        return false;
+        // ...
+      });
       // const body = JSON.stringify({ username: username, password: password });
       //   return this._http.post(this.url, body, this.options).pipe(
       //       map((response: Response) => {
