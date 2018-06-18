@@ -1,10 +1,10 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Http } from '@angular/http';
-import { FormGroup, FormControl, Validators, FormBuilder }  from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { environment } from '../../environments/environment';
 import { BannerService } from '../common/_services/banner.service';
 import datatablesConfig from '../common/_configs/datatable-pt-br.config';
-
+import * as firebase from 'firebase';
 @Component({
   selector: 'app-banner',
   templateUrl: './banner.template.html',
@@ -13,7 +13,7 @@ import datatablesConfig from '../common/_configs/datatable-pt-br.config';
 export class BannerComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
 
-  private banners = [];
+  private banners: any;
   public isLoading = true;
   public assetsUrl = environment.ASSETS_URL;
 
@@ -23,11 +23,11 @@ export class BannerComponent implements OnInit {
   private bannerEditImage = {};
 
   public addBannerForm: FormGroup;
-  private name = new FormControl("", Validators.required);
-  private order = new FormControl("", Validators.required);
-  private active = new FormControl("", Validators.required);
-  
-  private infoMsg = { body: "", type: "info"};
+  private name = new FormControl('', Validators.required);
+  private order = new FormControl('', Validators.required);
+  private active = new FormControl('', Validators.required);
+
+  private infoMsg = { body: '', type: 'info'};
 
   constructor(private http: Http,
               private _bannerService: BannerService,
@@ -55,14 +55,12 @@ export class BannerComponent implements OnInit {
   }
 
   addBanner() {
-    console.log(this.addBannerForm.value)
     this._bannerService.add(this.addBannerForm.value).subscribe(
       res => {
-        var newBanner = res;
+        const newBanner = res;
         this.banners.push(newBanner);
         this.addBannerForm.reset();
-        this.sendInfoMsg("Banner adicionado com sucesso.", "success");
-        this.getBanners();
+        console.log(this.uploadFile(this.addBannerForm.value.image));
       },
       error => console.log(error),
       () => this.getBanners()
@@ -77,7 +75,7 @@ export class BannerComponent implements OnInit {
   cancelEditing() {
     this.isEditing = false;
     this.banner = {};
-    this.sendInfoMsg("Edição de banner cancelada.", "warning");
+    this.sendInfoMsg('Edição de banner cancelada.', 'warning');
     this.getBanners();
   }
 
@@ -86,21 +84,21 @@ export class BannerComponent implements OnInit {
     this._bannerService.update(banner).subscribe(
       res => {
         this.isEditing = false;
-        banner.image = `uploads/${banner.image.filename}`
+        banner.image = `uploads/${banner.image.filename}`;
         this.banner = banner;
-        this.sendInfoMsg("Banner editado com sucesso.", "success");
+        this.sendInfoMsg('Banner editado com sucesso.', 'success');
       },
       error => console.log(error)
     );
   }
 
   deleteBanner(banner) {
-    if(window.confirm("Tem certeza que quer deletar este bannere?")) {
+    if (window.confirm('Tem certeza que quer deletar este bannere?')) {
       this._bannerService.remove(banner).subscribe(
         res => {
-          var pos = this.banners.map(banner => { return banner.id }).indexOf(banner.id);
+          const pos = this.banners.map(item => item.id).indexOf(banner.id);
           this.banners.splice(pos, 1);
-          this.sendInfoMsg("Banner deletado com sucesso.", "success");
+          this.sendInfoMsg('Banner deletado com sucesso.', 'success');
         },
         error => console.log(error),
         () => this.getBanners()
@@ -111,28 +109,65 @@ export class BannerComponent implements OnInit {
   sendInfoMsg(body, type, time = 3000) {
     this.infoMsg.body = body;
     this.infoMsg.type = type;
-    window.setTimeout(() => this.infoMsg.body = "", time);
+    window.setTimeout(() => this.infoMsg.body = '', time);
   }
 
   onFileChange(event) {
-    let reader = new FileReader();
-    if(event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.addBannerForm.get('image').setValue({
           filename: file.name,
           filetype: file.type,
           value: reader.result.split(',')[1]
-        })
-        
+        });
+
         this.bannerEditImage = {
           filename: file.name,
           filetype: file.type,
           value: reader.result.split(',')[1]
-        }
+        };
+
+        const ref = firebase.storage().ref();
+        // Create a reference to 'mountains.jpg'
+        const storageRef = ref.child(this.generateId() + file.name);
+        storageRef.put(file).then(function(snapshot) {
+            // console.log('Uploaded a blob or file!', snapshot);
+            snapshot.ref.getDownloadURL().then(function(downloadURL) {
+              console.log('File available at', downloadURL);
+            });
+            this.sendInfoMsg('Banner adicionado com sucesso.', 'success');
+            this.getBanners();
+        });
       };
     }
+  }
+
+  uploadFile(file) {
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const ref = firebase.storage().ref();
+        // Create a reference to 'mountains.jpg'
+        const storageRef = ref.child(this.generateId() + file.name);
+        return storageRef.put(file).then(function(snapshot) {
+            // console.log('Uploaded a blob or file!', snapshot);
+            snapshot.ref.getDownloadURL().then(function(downloadURL) {
+              return downloadURL;
+            });
+        });
+      };
+    }
+  }
+
+  generateId () {
+    // Math.random should be unique because of its seeding algorithm.
+    // Convert it to base 36 (numbers + letters), and grab the first 9 characters
+    // after the decimal.
+    return '_' + Math.random().toString(36).substr(2, 9);
   }
 
   clearFile() {

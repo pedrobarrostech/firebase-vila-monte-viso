@@ -14,28 +14,31 @@ export abstract class RestService<T> {
   constructor(protected _http: HttpClient, protected actionUrl: string) {
   }
 
-  getAll (): Observable<T[]> {
-    return this._http.get(this.actionUrl, this.options).pipe(
-                    map(this.extractData)
-                    // .catch(this.handleError)
-    )
+  getAll () {
+    return this._http.get(this.actionUrl, this.options);
+    // .pipe(
+    //                 map(this.extractData)
+    //                 // .catch(this.handleError)
+    // )
   }
 
-  add (data: T): Observable<T> {
+  add (data: T) {
     const body = JSON.stringify(data);
-    return this._http.post(this.actionUrl, body, this.options).pipe(
-                    map(this.extractData)
-                    // ,throwError(this.handleError)
-    );
+    return this._http.post(this.actionUrl, body, this.options);
+    // .pipe(
+    //                 map(this.extractData)
+    //                 // ,throwError(this.handleError)
+    // );
 
   }
 
   update(data: T) {
     const body = JSON.stringify(data);
-    return this._http.put(`${this.actionUrl}${data['id']}`, body, this.options).pipe(
-                    map((res: Response) => res.json())
-                    // .catch(this.handleError)
-                  );
+    return this._http.put(`${this.actionUrl}${data['id']}`, body, this.options);
+    // .pipe(
+                  //   map((res: Response) => res.json())
+                  //   // .catch(this.handleError)
+                  // );
   }
 
   remove(data: T)  {

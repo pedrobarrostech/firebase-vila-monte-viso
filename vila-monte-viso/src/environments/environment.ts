@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  API_URL: 'http://localhost:4040/api/',
+  API_URL: 'https://us-central1-vila-monte-viso-43dac.cloudfunctions.net/',
   ASSETS_URL: 'http://localhost:4040/',
   firebase: {
     apiKey: 'AIzaSyB39qnA96wOBt_Rtr_Uy-ReMya2LL4gycY',

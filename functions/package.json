@@ -25,7 +25,8 @@
     "reflect-metadata": "^0.1.12",
     "routing-controllers": "^0.7.7",
     "typedi": "^0.7.2",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "firebase": "^5.0.2"
   },
   "devDependencies": {
     "@types/body-parser": "^1.16.8",

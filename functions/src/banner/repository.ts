@@ -5,33 +5,37 @@ import { QuerySnapshot } from "@google-cloud/firestore"
 
 
 @Service()
-export class UserRepository {
+export class BannerRepository {
 
-    docRef = firestore().collection("users");
+    docRef = firestore().collection("banners");
 
     async findAll(): Promise<QuerySnapshot> {
         return this.docRef.get();
     }
 
-    async save(username: string, password: string): Promise<string> {
+    async save(name: string, image: string, order: number, active: number): Promise<string> {
 
         const id = uuid();
 
         await this.docRef.doc(id).set({
-            id: id,
-            username: username,
-            password: password
+            id,
+            name,
+            image,
+            order,
+            active
         });
 
         return id;
 
     }
 
-    async update(id: string, username: string, password: string): Promise<void> {
+    async update(id: string, name: string, image: string, order: number, active: number): Promise<void> {
         this.docRef.doc(id).update({
-            id: id,
-            username: username,
-            password: password
+            id,
+            name,
+            image,
+            order,
+            active
         });
     }
 

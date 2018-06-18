@@ -39,10 +39,11 @@ export class UserService {
 
   update(data: User) {
     const body = JSON.stringify(data);
-    return this._http.put(`${this.actionUrl}${data['id']}`, body, this.options).pipe(
-                    map((res: Response) => res.json())
+    return this._http.put(`${this.actionUrl}${data['id']}`, body, this.options)
+    // .pipe(
+    //              map((res: Response) => res.json())
                     // .catch(this.handleError)
-                  );
+    //            );
   }
 
   remove(data: User)  {

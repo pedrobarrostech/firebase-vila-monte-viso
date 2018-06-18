@@ -10,9 +10,9 @@ import {
 } from "body-parser"
 
 import { App } from "../app"
-import { UserController } from "./controller"
+import { BannerController } from "./controller"
 
-class UserApp extends App {
+class BannerApp extends App {
 
     middleware(): Array<Function> {
         return [
@@ -22,10 +22,10 @@ class UserApp extends App {
 
     controllers(): Array<Function> {
         return [
-            UserController,
+            BannerController,
         ];
     }
 
 }
 
-export const userApp = new UserApp().express
+export const bannerApp = new BannerApp().express

@@ -10,16 +10,16 @@ import {
 
 import { Inject } from "typedi";
 
-import { User } from "./model"
-import { UserNotFoundError } from "./error"
-import { UserService } from "./service";
+import { Banner } from "./model"
+import { BannerNotFoundError } from "./error"
+import { BannerService } from "./service";
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 @JsonController()
-export class UserController {
+export class BannerController {
 
     @Inject()
-    userService: UserService;
+    bannerService: BannerService;
 
     @Get()
     @UseBefore((req, res, next) => {
@@ -43,7 +43,7 @@ export class UserController {
 
         admin.auth().verifyIdToken(idToken).then((decodedIdToken) => {
             console.log('ID Token correctly decoded', decodedIdToken);
-            req.user = decodedIdToken;
+            req.banner = decodedIdToken;
             return next();
         }).catch((error) => {
             console.error('Error while verifying Firebase ID token:', error);
@@ -51,31 +51,31 @@ export class UserController {
         });
     })
     getAll() {
-        return this.userService.findAll();
+        return this.bannerService.findAll();
     }
 
     @Get("/:id")
-    @OnUndefined(UserNotFoundError)
+    @OnUndefined(BannerNotFoundError)
     getOne(@Param("id") id: string) {
-        return this.userService.findById(id);
+        return this.bannerService.findById(id);
     }
 
     @Post()
-    save(@Body() user: User) {
-        return this.userService.save(user);
+    save(@Body() banner: Banner) {
+        return this.bannerService.save(banner);
     }
 
     @Put("/:id")
-    @OnUndefined(UserNotFoundError)
-    async update(@Param("id") id: string, @Body() user: User) {
-        return this.userService.update(id, user);
+    @OnUndefined(BannerNotFoundError)
+    async update(@Param("id") id: string, @Body() banner: Banner) {
+        return this.bannerService.update(id, banner);
     }
 
     @Delete("/:id")
     @HttpCode(204)
-    @OnUndefined(UserNotFoundError)
+    @OnUndefined(BannerNotFoundError)
     async delete(@Param("id") id: string) {
-        await this.userService.delete(id);
+        await this.bannerService.delete(id);
         return "delete"
     }
 
