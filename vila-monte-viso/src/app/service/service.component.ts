@@ -13,7 +13,7 @@ import datatablesConfig from '../common/_configs/datatable-pt-br.config';
 export class ServiceComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
 
-  private services = [];
+  private services: any;
   public isLoading = true;
 
   private service = {};
@@ -26,7 +26,7 @@ export class ServiceComponent implements OnInit {
   private description = new FormControl("", Validators.required);
   private link = new FormControl("", Validators.required);
   private active = new FormControl("", Validators.required);
-  
+
   private infoMsg = { body: "", type: "info"};
 
   constructor(private http: Http,
@@ -80,7 +80,7 @@ export class ServiceComponent implements OnInit {
   }
 
   editService(service) {
-  
+
     service.image = this.serviceEditImage ? this.serviceEditImage : service.image;
     this._serviceService.update(service).subscribe(
       res => {

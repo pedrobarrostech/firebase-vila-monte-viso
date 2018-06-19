@@ -30,7 +30,7 @@ export class BannerService {
             const doc = document.data();
 
             banners.push(
-                new BannerEntity(doc.id, doc.name, doc.image, doc.order, doc.active)
+                new BannerEntity(doc.id, doc.name, doc.image, doc.imageRef, doc.order, doc.active)
             );
 
         });
@@ -44,7 +44,7 @@ export class BannerService {
 
         const data = document.data();
 
-        return new BannerEntity(data.id, data.name, data.image, data.order, data.active);
+        return new BannerEntity(data.id, data.name, data.image, data.imageRef, data.order, data.active);
 
     }
 
@@ -53,12 +53,13 @@ export class BannerService {
         const id = await this.bannerRepository.save(
             banner.name,
             banner.image,
+            banner.imageRef,
             banner.order,
             banner.active
         );
 
 
-        return new BannerEntity(id, banner.name, banner.image, banner.order, banner.active);
+        return new BannerEntity(id, banner.name, banner.image, banner.imageRef, banner.order, banner.active);
     }
 
     async update(id: string, banner: Banner): Promise<BannerEntity> {
@@ -67,11 +68,12 @@ export class BannerService {
             id,
             banner.name,
             banner.image,
+            banner.imageRef,
             banner.order,
             banner.active
         );
 
-        return new BannerEntity(id, banner.name, banner.image, banner.order, banner.active);
+        return new BannerEntity(id, banner.name, banner.image, banner.imageRef, banner.order, banner.active);
     }
 
     async delete(id: string): Promise<void> {

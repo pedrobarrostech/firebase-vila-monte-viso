@@ -17,7 +17,7 @@ export class MonthlyReportComponent implements OnInit {
     @ViewChild('chart') chart: UIChart;
 
     private dtOptions: DataTables.Settings = {};
-    public schedules = [];
+    public schedules: any;
     public isLoading = true;
     private totalPositiveEntries;
     private totalNegativeEntries;

@@ -11,7 +11,7 @@ import { ScheduleService } from '../common/_services/schedule.service';
 })
 export class ScheduleComponent implements OnInit {
 
-  public schedules = [];
+  public schedules: any;
   public isLoading = true;
 
   public schedule = {};

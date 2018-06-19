@@ -12,7 +12,7 @@ import datatablesConfig from '../common/_configs/datatable-pt-br.config';
 })
 export class ClientComponent implements OnInit {
 
-  private clients = [];
+  private clients: any;
   public isLoading = true;
 
   private client = {};
@@ -34,7 +34,7 @@ export class ClientComponent implements OnInit {
   private email = new FormControl("", Validators.required);
   private birthday = new FormControl("", Validators.required);
   private info = new FormControl("", Validators.required);
-  
+
   private infoMsg = { body: "", type: "info"};
 
   constructor(private http: Http,

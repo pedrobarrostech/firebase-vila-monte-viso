@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { environment } from '../../environments/environment';
 import { BannerService } from '../common/_services/banner.service';
+import { UploadService } from '../common/_services/upload.service';
 import datatablesConfig from '../common/_configs/datatable-pt-br.config';
 import * as firebase from 'firebase';
 @Component({
@@ -41,6 +42,7 @@ export class BannerComponent implements OnInit {
       name: this.name,
       order: this.order,
       image: null,
+      imageRef: null,
       active: this.active
     });
 
@@ -54,13 +56,12 @@ export class BannerComponent implements OnInit {
     );
   }
 
-  addBanner() {
+  async addBanner() {
     this._bannerService.add(this.addBannerForm.value).subscribe(
       res => {
         const newBanner = res;
         this.banners.push(newBanner);
         this.addBannerForm.reset();
-        console.log(this.uploadFile(this.addBannerForm.value.image));
       },
       error => console.log(error),
       () => this.getBanners()
@@ -80,11 +81,9 @@ export class BannerComponent implements OnInit {
   }
 
   editBanner(banner) {
-    banner.image = this.bannerEditImage ? this.bannerEditImage : banner.image;
     this._bannerService.update(banner).subscribe(
       res => {
         this.isEditing = false;
-        banner.image = `uploads/${banner.image.filename}`;
         this.banner = banner;
         this.sendInfoMsg('Banner editado com sucesso.', 'success');
       },
@@ -92,8 +91,12 @@ export class BannerComponent implements OnInit {
     );
   }
 
-  deleteBanner(banner) {
-    if (window.confirm('Tem certeza que quer deletar este bannere?')) {
+  async deleteBanner(banner) {
+    if (window.confirm('Tem certeza que quer deletar este banner?')) {
+      const ref = firebase.storage().ref();
+      const storageRef = ref.child(banner.imageRef);
+      await storageRef.delete();
+
       this._bannerService.remove(banner).subscribe(
         res => {
           const pos = this.banners.map(item => item.id).indexOf(banner.id);
@@ -113,51 +116,44 @@ export class BannerComponent implements OnInit {
   }
 
   onFileChange(event) {
-    const reader = new FileReader();
     if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.addBannerForm.get('image').setValue({
-          filename: file.name,
-          filetype: file.type,
-          value: reader.result.split(',')[1]
-        });
+      const imageInfo: any = UploadService.uploadFile(event.target.files[0]);
 
-        this.bannerEditImage = {
-          filename: file.name,
-          filetype: file.type,
-          value: reader.result.split(',')[1]
-        };
+      this.addBannerForm.get('image').setValue(imageInfo.image);
+      this.addBannerForm.get('imageRef').setValue(imageInfo.imageRef);
 
-        const ref = firebase.storage().ref();
-        // Create a reference to 'mountains.jpg'
-        const storageRef = ref.child(this.generateId() + file.name);
-        storageRef.put(file).then(function(snapshot) {
-            // console.log('Uploaded a blob or file!', snapshot);
-            snapshot.ref.getDownloadURL().then(function(downloadURL) {
-              console.log('File available at', downloadURL);
-            });
-            this.sendInfoMsg('Banner adicionado com sucesso.', 'success');
-            this.getBanners();
-        });
-      };
+
+      // const reader = new FileReader();
+      // const file = event.target.files[0];
+      // reader.readAsDataURL(file);
+      // reader.onload = () => {
+
+      //   const filename = this.generateId() + file.name;
+      //   const ref = firebase.storage().ref();
+      //   const storageRef = ref.child(filename);
+      //   storageRef.put(file).then((snapshot) => {
+      //     snapshot.ref.getDownloadURL().then((downloadURL) => {
+
+      //     });
+      //   });
+      // };
     }
   }
 
   uploadFile(file) {
-    const reader = new FileReader();
+
     if (file) {
+      const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
+        const filename = this.generateId() + file.name;
         const ref = firebase.storage().ref();
-        // Create a reference to 'mountains.jpg'
-        const storageRef = ref.child(this.generateId() + file.name);
-        return storageRef.put(file).then(function(snapshot) {
-            // console.log('Uploaded a blob or file!', snapshot);
-            snapshot.ref.getDownloadURL().then(function(downloadURL) {
-              return downloadURL;
-            });
+        const storageRef = ref.child(filename);
+        storageRef.put(file).then((snapshot) => {
+          snapshot.ref.getDownloadURL().then((downloadURL) => {
+            this.addBannerForm.get('image').setValue(downloadURL);
+            this.addBannerForm.get('imageRef').setValue(filename);
+          });
         });
       };
     }

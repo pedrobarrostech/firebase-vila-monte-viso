@@ -8,7 +8,7 @@ import { ScheduleService } from '../common/_services/schedule.service';
 })
 export class ReportComponent {
 
-  public data = [];
+  public data: any;
   public years: any;
 
   constructor(private _entryService: EntryService, private _scheduleService: ScheduleService, private route: ActivatedRoute) {

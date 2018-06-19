@@ -13,6 +13,9 @@ export class Banner {
     image: string = "";
 
     @IsNotEmpty()
+    imageRef: string = "";
+
+    @IsNotEmpty()
     order: number = 0;
 
     @IsNotEmpty()
@@ -25,13 +28,15 @@ export class BannerEntity {
     id: string;
     name: string;
     image: string;
+    imageRef: string;
     order: number;
     active: number;
 
-    constructor(id: string, name: string, password: string, order: number, active: number) {
+    constructor(id: string, name: string, image: string, imageRef: string, order: number, active: number) {
         this.id = id;
         this.name = name;
-        this.image = password;
+        this.image = image;
+        this.imageRef = imageRef;
         this.order = order;
         this.active;
     }

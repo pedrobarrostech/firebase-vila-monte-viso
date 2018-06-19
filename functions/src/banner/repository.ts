@@ -13,7 +13,7 @@ export class BannerRepository {
         return this.docRef.get();
     }
 
-    async save(name: string, image: string, order: number, active: number): Promise<string> {
+    async save(name: string, image: string, imageRef: string, order: number, active: number): Promise<string> {
 
         const id = uuid();
 
@@ -21,6 +21,7 @@ export class BannerRepository {
             id,
             name,
             image,
+            imageRef,
             order,
             active
         });
@@ -29,11 +30,12 @@ export class BannerRepository {
 
     }
 
-    async update(id: string, name: string, image: string, order: number, active: number): Promise<void> {
+    async update(id: string, name: string, image: string, imageRef: string, order: number, active: number): Promise<void> {
         this.docRef.doc(id).update({
             id,
             name,
             image,
+            imageRef,
             order,
             active
         });

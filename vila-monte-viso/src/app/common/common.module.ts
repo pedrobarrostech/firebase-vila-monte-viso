@@ -22,6 +22,7 @@ import { SectionService } from '../common/_services/section.service';
 import { ProductService } from '../common/_services/product.service';
 import { ServiceService } from '../common/_services/service.service';
 import { UserService } from '../common/_services/user.service';
+import { UploadService } from '../common/_services/upload.service';
 
 const MODULES = [
   HttpClientModule,
@@ -56,7 +57,8 @@ const SERVICES = [
   SectionService,
   ServiceService,
   ProductService,
-  UserService
+  UserService,
+  UploadService
 ];
 
 @NgModule({

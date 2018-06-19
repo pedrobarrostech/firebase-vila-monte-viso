@@ -18,7 +18,7 @@ export class YearlyReportComponent {
 
     private dtOptions: DataTables.Settings = {};
     public data: any;
-    public schedules = [];
+    public schedules: any;
     public isLoading = true;
     private totalPositiveEntries = 0;
     private totalNegativeEntries = 0;

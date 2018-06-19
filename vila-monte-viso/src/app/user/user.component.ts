@@ -13,7 +13,7 @@ import datatablesConfig from '../common/_configs/datatable-pt-br.config';
 })
 export class UserComponent implements OnInit {
 
-  private users = [];
+  private users: any;
   public isLoading = true;
 
   private user = {};

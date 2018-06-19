@@ -13,7 +13,7 @@ import datatablesConfig from '../common/_configs/datatable-pt-br.config';
 export class SectionComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
 
-  private sections = [];
+  private sections: any;
   public isLoading = true;
   public assetsUrl = environment.ASSETS_URL;
 

@@ -12,7 +12,7 @@ import datatablesConfig from '../common/_configs/datatable-pt-br.config';
 })
 export class MessageComponent implements OnInit {
 
-  private messages = [];
+  private messages: any;
   public isLoading = true;
 
   private message = {};
