@@ -4,27 +4,46 @@ import * as firebase from 'firebase';
 @Injectable()
 export class UploadService {
 
-  static uploadFile(file) {
-    if (file) {
-      let imageInfo = { image: '', imageRef: '' };
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = async () => {
-        const filename = this.generateId() + file.name;
-        const ref = firebase.storage().ref();
-        const storageRef = ref.child(filename);
-        const snapshot = await storageRef.put(file);
-        const downloadURL = await snapshot.ref.getDownloadURL();
-        imageInfo = {
-          image: downloadURL,
-          imageRef: filename
-        };
-        return;
-      };
-      return imageInfo;
-    }
-  }
+  // static uploadFile(file) {
+  //   if (file) {
+  //     let imageInfo = { image: '', imageRef: '' };
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = async () => {
+  //       const filename = this.generateId() + file.name;
+  //       const ref = firebase.storage().ref();
+  //       const storageRef = ref.child(filename);
+  //       const snapshot = await storageRef.put(file);
+  //       const downloadURL = await snapshot.ref.getDownloadURL();
+  //       imageInfo = {
+  //         image: downloadURL,
+  //         imageRef: filename
+  //       };
+  //       return;
+  //     };
+  //     return imageInfo;
+  //   }
+  // }
 
+  static uploadFile(file) {
+    const reader = new FileReader();
+    let imageInfo = { image: '', imageRef: '' };
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const filename = this.generateId() + file.name;
+      const ref = firebase.storage().ref();
+      const storageRef = ref.child(filename);
+      storageRef.put(file).then((snapshot) => {
+        snapshot.ref.getDownloadURL().then((downloadURL) => {
+          imageInfo = {
+            image: downloadURL,
+            imageRef: filename
+          };
+        });
+      });
+      return imageInfo;
+    };
+  }
   static async deleteFile(imageRef) {
     if (imageRef) {
       const ref = firebase.storage().ref();

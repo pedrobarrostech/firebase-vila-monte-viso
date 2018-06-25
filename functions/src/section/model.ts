@@ -2,7 +2,7 @@ import {
     IsNotEmpty
 } from "class-validator";
 
-export class Banner {
+export class Section {
 
     id: string;
 
@@ -10,35 +10,35 @@ export class Banner {
     name: string = "";
 
     @IsNotEmpty()
+    info: string = "";
+
+    @IsNotEmpty()
+    description: string = "";
+
+    @IsNotEmpty()
     image: string = "";
 
     @IsNotEmpty()
     imageRef: string = "";
 
-    @IsNotEmpty()
-    order: number = 0;
-
-    @IsNotEmpty()
-    active: number = 0;
-
 }
 
-export class BannerEntity {
+export class SectionEntity {
 
     id: string;
     name: string;
+    info: string;
+    description: string;
     image: string;
     imageRef: string;
-    order: number;
-    active: number;
 
-    constructor(id: string, name: string, image: string, imageRef: string, order: number, active: number) {
+    constructor(id: string, name: string, info: string, description: string, image: string, imageRef: string) {
         this.id = id;
         this.name = name;
+        this.info = info;
+        this.description = description;
         this.image = image;
         this.imageRef = imageRef;
-        this.order = order;
-        this.active = active;
     }
 
 }

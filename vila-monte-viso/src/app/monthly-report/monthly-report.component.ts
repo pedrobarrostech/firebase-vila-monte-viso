@@ -42,14 +42,13 @@ export class MonthlyReportComponent implements OnInit {
                 this.getTotalEntries();
                 this.getTotalNegativeEntries();
                 this.getTotalPositiveEntries();
-                
             });
     }
 
     getTotalEntries() {
         this._entryService.getTotalEntriesByMonthAndYear(this.month, this.year).subscribe(
             data => {
-                this.subtotal = data
+                this.subtotal = data;
                 this.chart.refresh();
             },
             error => console.log(error),

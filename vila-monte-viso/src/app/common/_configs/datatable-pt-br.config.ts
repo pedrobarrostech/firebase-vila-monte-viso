@@ -21,4 +21,5 @@ export default {
             'sortDescending': ': Ordenar colunas de forma descendente'
         }
     }
-}
+};
+

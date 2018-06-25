@@ -1,10 +1,10 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { Http } from '@angular/http';
-import { FormGroup, FormControl, Validators, FormBuilder }  from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { environment } from '../../environments/environment';
 import { SectionService } from '../common/_services/section.service';
+import { UploadService } from '../common/_services/upload.service';
 import datatablesConfig from '../common/_configs/datatable-pt-br.config';
-
+import * as firebase from 'firebase';
 @Component({
   selector: 'app-section',
   templateUrl: './section.template.html',
@@ -20,16 +20,14 @@ export class SectionComponent implements OnInit {
   private section = {};
   private isEditing = false;
   private dtOptions: DataTables.Settings = {};
-  private sectionEditImage = {};
 
   public addSectionForm: FormGroup;
-  private name = new FormControl("", Validators.required);
-  private description = new FormControl("", Validators.required);
-  private info = new FormControl("", Validators.required);
-  
-  private infoMsg = { body: "", type: "info"};
+  private name = new FormControl('', Validators.required);
+  private description = new FormControl('', Validators.required);
+  private info = new FormControl('', Validators.required);
+  private infoMsg = { body: '', type: 'info'};
 
-  constructor(private http: Http,
+  constructor(
               private _sectionService: SectionService,
               private formBuilder: FormBuilder) { }
 
@@ -41,6 +39,7 @@ export class SectionComponent implements OnInit {
       name: this.name,
       description: this.description,
       image: null,
+      imageRef: null,
       info: this.info
     });
 
@@ -57,10 +56,10 @@ export class SectionComponent implements OnInit {
   addSection() {
     this._sectionService.add(this.addSectionForm.value).subscribe(
       res => {
-        var newSection = res;
+        const newSection = res;
         this.sections.push(newSection);
         this.addSectionForm.reset();
-        this.sendInfoMsg("Sessão adicionado com sucesso.", "success");
+        this.sendInfoMsg('Sessão adicionado com sucesso.', 'success');
       },
       error => console.log(error),
       () => this.getSections()
@@ -75,30 +74,32 @@ export class SectionComponent implements OnInit {
   cancelEditing() {
     this.isEditing = false;
     this.section = {};
-    this.sendInfoMsg("Edição de sessão cancelada.", "warning");
+    this.sendInfoMsg('Edição de sessão cancelada.', 'warning');
     this.getSections();
   }
 
   editSection(section) {
-    section.image = this.sectionEditImage ? this.sectionEditImage : section.image;
     this._sectionService.update(section).subscribe(
       res => {
         this.isEditing = false;
         section.image = `uploads/${section.image.filename}`;
         this.section = section;
-        this.sendInfoMsg("Sessão editado com sucesso.", "success");
+        this.sendInfoMsg('Sessão editado com sucesso.', 'success');
       },
       error => console.log(error)
     );
   }
 
-  deleteSection(section) {
-    if(window.confirm("Tem certeza que quer deletar este sectione?")) {
+  async deleteSection(section) {
+    if (window.confirm('Tem certeza que quer deletar esta sessão?')) {
+      const ref = firebase.storage().ref();
+      const storageRef = ref.child(section.imageRef);
+      await storageRef.delete();
       this._sectionService.remove(section).subscribe(
         res => {
-          var pos = this.sections.map(section => { return section.id }).indexOf(section.id);
+          const pos = this.sections.map(sectionItem => sectionItem.id).indexOf(section.id);
           this.sections.splice(pos, 1);
-          this.sendInfoMsg("Sessão deletado com sucesso.", "success");
+          this.sendInfoMsg('Sessão deletado com sucesso.', 'success');
         },
         error => console.log(error),
         () => this.getSections()
@@ -109,33 +110,28 @@ export class SectionComponent implements OnInit {
   sendInfoMsg(body, type, time = 3000) {
     this.infoMsg.body = body;
     this.infoMsg.type = type;
-    window.setTimeout(() => this.infoMsg.body = "", time);
+    window.setTimeout(() => this.infoMsg.body = '', time);
   }
 
-  onFileChange(event) {
-    let reader = new FileReader();
-    if(event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
+  async onFileChange(event) {
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      const file = event.target.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
-        this.addSectionForm.get('image').setValue({
-          filename: file.name,
-          filetype: file.type,
-          value: reader.result.split(',')[1]
-        })
-        
-        this.sectionEditImage = {
-          filename: file.name,
-          filetype: file.type,
-          value: reader.result.split(',')[1]
-        }
+
+        const filename = UploadService.generateId() + file.name;
+        const ref = firebase.storage().ref();
+        const storageRef = ref.child(filename);
+        storageRef.put(file).then((snapshot) => {
+          snapshot.ref.getDownloadURL().then((downloadURL) => {
+            this.addSectionForm.get('image').setValue(downloadURL);
+            this.addSectionForm.get('imageRef').setValue(filename);
+            console.log(this.addSectionForm);
+          });
+        });
       };
     }
-  }
-
-  clearFile() {
-    this.addSectionForm.get('image').setValue(null);
-    this.fileInput.nativeElement.value = '';
   }
 
 }

@@ -17,6 +17,18 @@ import {
     BannerTriggerFirestore
 } from "./banner"
 
+
+import {
+    clientApp,
+    ClientTriggerFirestore
+} from "./client"
+
+
+import {
+    sectionApp,
+    SectionTriggerFirestore
+} from "./section"
+
 admin.initializeApp(functions.config().firebase);
 
 export const auth = functions.https.onRequest(authApp);
@@ -33,6 +45,21 @@ export const bannerOnWrite = functions.firestore.document(BannerTriggerFirestore
 export const bannerOnUpdate = functions.firestore.document(BannerTriggerFirestore.path).onUpdate(BannerTriggerFirestore.onUpdate);
 export const bannerOnCreate = functions.firestore.document(BannerTriggerFirestore.path).onCreate(BannerTriggerFirestore.onCreate);
 export const bannerOnDelete = functions.firestore.document(BannerTriggerFirestore.path).onDelete(BannerTriggerFirestore.onDelete);
+
+
+export const clients = functions.https.onRequest(clientApp);
+
+export const clientOnWrite = functions.firestore.document (ClientTriggerFirestore.path).onWrite(ClientTriggerFirestore.onWrite);
+export const clientOnUpdate = functions.firestore.document(ClientTriggerFirestore.path).onUpdate(ClientTriggerFirestore.onUpdate);
+export const clientOnCreate = functions.firestore.document(ClientTriggerFirestore.path).onCreate(ClientTriggerFirestore.onCreate);
+export const clientOnDelete = functions.firestore.document(ClientTriggerFirestore.path).onDelete(ClientTriggerFirestore.onDelete);
+
+export const sections = functions.https.onRequest(sectionApp);
+
+export const sectionOnWrite = functions.firestore.document (SectionTriggerFirestore.path).onWrite(SectionTriggerFirestore.onWrite);
+export const sectionOnUpdate = functions.firestore.document(SectionTriggerFirestore.path).onUpdate(SectionTriggerFirestore.onUpdate);
+export const sectionOnCreate = functions.firestore.document(SectionTriggerFirestore.path).onCreate(SectionTriggerFirestore.onCreate);
+export const sectionOnDelete = functions.firestore.document(SectionTriggerFirestore.path).onDelete(SectionTriggerFirestore.onDelete);
 
 
 export const helloWorld = functions.https.onRequest(async (request, response) => {

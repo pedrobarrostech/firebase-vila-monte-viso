@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Http } from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormControl, Validators, FormBuilder }  from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import { ScheduleService } from '../common/_services/schedule.service';
 
@@ -25,7 +24,7 @@ export class ScheduleComponent implements OnInit {
   private price = new FormControl('', Validators.required);
   private infoMsg = { body: '', type: 'info'};
 
-  constructor(private http: Http,
+  constructor(
               private _routeParams: ActivatedRoute,
               private _scheduleService: ScheduleService,
               private formBuilder: FormBuilder) { }
@@ -56,7 +55,7 @@ export class ScheduleComponent implements OnInit {
   addSchedule() {
     this._scheduleService.add(this.clientId, this.addScheduleForm.value).subscribe(
       res => {
-        let newSchedule = res;
+        const newSchedule = res;
         this.schedules.push(newSchedule);
         this.addScheduleForm.reset();
         this.sendInfoMsg('Horário adicionado com sucesso.', 'success');
@@ -79,10 +78,10 @@ export class ScheduleComponent implements OnInit {
   }
 
   deleteSchedule(schedule) {
-    if(window.confirm('Are you sure you want to permanently delete this item?')) {
+    if (window.confirm('Are you sure you want to permanently delete this item?')) {
       this._scheduleService.remove(this.clientId, schedule).subscribe(
         res => {
-          let pos = this.schedules.map(schedule => { return schedule.id; }).indexOf(schedule.id);
+          const pos = this.schedules.map(scheduleItem => scheduleItem.id).indexOf(schedule.id);
           this.schedules.splice(pos, 1);
           this.sendInfoMsg('Horário deletado com sucesso.', 'success');
         },

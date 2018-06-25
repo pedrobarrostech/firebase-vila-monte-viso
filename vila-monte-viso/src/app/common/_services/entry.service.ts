@@ -2,7 +2,6 @@
 import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Schedule } from '../_models/schedule';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
@@ -98,13 +97,13 @@ export class EntryService {
       .catch(this.handleError);
   }
 
-  private extractData(res: Response) {
-    let body = res.json();
+  private extractData(res) {
+    const body = res.json();
     return body.data || {};
   }
 
   private handleError(error: any) {
-    let errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+    const errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     console.error(errMsg);
     return observableThrowError(errMsg);
   }

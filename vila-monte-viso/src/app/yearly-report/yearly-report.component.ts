@@ -13,7 +13,7 @@ import yearlyCharConfig from '../common/_configs/yearly-chart.config';
     styleUrls: [ './yearly-report.style.css' ],
     templateUrl: './yearly-report.template.html'
 })
-export class YearlyReportComponent {
+export class YearlyReportComponent implements OnInit {
     @ViewChild('chart') chart: UIChart;
 
     private dtOptions: DataTables.Settings = {};
@@ -28,10 +28,9 @@ export class YearlyReportComponent {
     constructor(private _entryService: EntryService, private route: ActivatedRoute) {
     }
 
-    ngOnInit() {
+    ngOnInit () {
         this.data = yearlyCharConfig;
         this.dtOptions = datatablesConfig;
-        
         this.route
             .queryParams
             .subscribe(params => {
@@ -45,7 +44,7 @@ export class YearlyReportComponent {
     getSchedules() {
         this._entryService.getEntriesByYear(this.year).subscribe(
             data => {
-                this.schedules = data
+                this.schedules = data;
                 this.chart.refresh();
             },
             error => console.log(error),
@@ -88,3 +87,4 @@ export class YearlyReportComponent {
         );
     }
 }
+

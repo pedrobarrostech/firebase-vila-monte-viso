@@ -6,7 +6,6 @@ export class Schedule {
     public title?: string,
     public start?: string,
     public end?: string,
-    public createAt?: string) {             
+    public createAt?: string) {
   }
-
 }

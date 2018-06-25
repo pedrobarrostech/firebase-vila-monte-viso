@@ -1,5 +1,4 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { Http } from '@angular/http';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { environment } from '../../environments/environment';
 import { ProductService } from '../common/_services/product.service';
@@ -23,14 +22,14 @@ export class ProductComponent implements OnInit {
   private productEditImage = {};
 
   public addProductForm: FormGroup;
-  private name = new FormControl("", Validators.required);
-  private description = new FormControl("", Validators.required);
-  private link = new FormControl("", Validators.required);
-  private active = new FormControl("", Validators.required);
+  private name = new FormControl('', Validators.required);
+  private description = new FormControl('', Validators.required);
+  private link = new FormControl('', Validators.required);
+  private active = new FormControl('', Validators.required);
 
-  private infoMsg = { body: "", type: "info"};
+  private infoMsg = { body: '', type: 'info'};
 
-  constructor(private http: Http,
+  constructor(
               private _productService: ProductService,
               private formBuilder: FormBuilder) { }
 
@@ -59,10 +58,10 @@ export class ProductComponent implements OnInit {
   addProduct() {
     this._productService.add(this.addProductForm.value).subscribe(
       res => {
-        var newProduct = res;
+        const newProduct = res;
         this.products.push(newProduct);
         this.addProductForm.reset();
-        this.sendInfoMsg("Produto adicionado com sucesso.", "success");
+        this.sendInfoMsg('Produto adicionado com sucesso.', 'success');
       },
       error => console.log(error),
       () => this.getProducts()
@@ -77,7 +76,7 @@ export class ProductComponent implements OnInit {
   cancelEditing() {
     this.isEditing = false;
     this.product = {};
-    this.sendInfoMsg("Edição de produto cancelada.", "warning");
+    this.sendInfoMsg('Edição de produto cancelada.', 'warning');
     this.getProducts();
   }
 
@@ -88,19 +87,19 @@ export class ProductComponent implements OnInit {
         this.isEditing = false;
         product.image = `uploads/${product.image.filename}`;
         this.product = product;
-        this.sendInfoMsg("Produto editado com sucesso.", "success");
+        this.sendInfoMsg('Produto editado com sucesso.', 'success');
       },
       error => console.log(error)
     );
   }
 
   deleteProduct(product) {
-    if(window.confirm("Tem certeza que quer deletar este producte?")) {
+    if (window.confirm('Tem certeza que quer deletar este producte?')) {
       this._productService.remove(product).subscribe(
         res => {
-          var pos = this.products.map(product => { return product.id }).indexOf(product.id);
+          const pos = this.products.map(productItem => productItem.id).indexOf(product.id);
           this.products.splice(pos, 1);
-          this.sendInfoMsg("Produto deletado com sucesso.", "success");
+          this.sendInfoMsg('Produto deletado com sucesso.', 'success');
         },
         error => console.log(error),
         () => this.getProducts()
@@ -111,26 +110,26 @@ export class ProductComponent implements OnInit {
   sendInfoMsg(body, type, time = 3000) {
     this.infoMsg.body = body;
     this.infoMsg.type = type;
-    window.setTimeout(() => this.infoMsg.body = "", time);
+    window.setTimeout(() => this.infoMsg.body = '', time);
   }
 
   onFileChange(event) {
-    let reader = new FileReader();
-    if(event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.addProductForm.get('image').setValue({
           filename: file.name,
           filetype: file.type,
           value: reader.result.split(',')[1]
-        })
+        });
 
         this.productEditImage = {
           filename: file.name,
           filetype: file.type,
           value: reader.result.split(',')[1]
-        }
+        };
       };
     }
   }

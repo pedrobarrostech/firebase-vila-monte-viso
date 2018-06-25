@@ -1,5 +1,4 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { Http } from '@angular/http';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { environment } from '../../environments/environment';
 import { BannerService } from '../common/_services/banner.service';
@@ -30,7 +29,7 @@ export class BannerComponent implements OnInit {
 
   private infoMsg = { body: '', type: 'info'};
 
-  constructor(private http: Http,
+  constructor(
               private _bannerService: BannerService,
               private formBuilder: FormBuilder) { }
 
@@ -62,6 +61,7 @@ export class BannerComponent implements OnInit {
         const newBanner = res;
         this.banners.push(newBanner);
         this.addBannerForm.reset();
+        this.sendInfoMsg('Banner adicionado com sucesso.', 'success');
       },
       error => console.log(error),
       () => this.getBanners()
@@ -115,38 +115,14 @@ export class BannerComponent implements OnInit {
     window.setTimeout(() => this.infoMsg.body = '', time);
   }
 
-  onFileChange(event) {
+  async onFileChange(event) {
     if (event.target.files && event.target.files.length > 0) {
-      const imageInfo: any = UploadService.uploadFile(event.target.files[0]);
-
-      this.addBannerForm.get('image').setValue(imageInfo.image);
-      this.addBannerForm.get('imageRef').setValue(imageInfo.imageRef);
-
-
-      // const reader = new FileReader();
-      // const file = event.target.files[0];
-      // reader.readAsDataURL(file);
-      // reader.onload = () => {
-
-      //   const filename = this.generateId() + file.name;
-      //   const ref = firebase.storage().ref();
-      //   const storageRef = ref.child(filename);
-      //   storageRef.put(file).then((snapshot) => {
-      //     snapshot.ref.getDownloadURL().then((downloadURL) => {
-
-      //     });
-      //   });
-      // };
-    }
-  }
-
-  uploadFile(file) {
-
-    if (file) {
       const reader = new FileReader();
+      const file = event.target.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
-        const filename = this.generateId() + file.name;
+
+        const filename = UploadService.generateId() + file.name;
         const ref = firebase.storage().ref();
         const storageRef = ref.child(filename);
         storageRef.put(file).then((snapshot) => {
@@ -158,17 +134,4 @@ export class BannerComponent implements OnInit {
       };
     }
   }
-
-  generateId () {
-    // Math.random should be unique because of its seeding algorithm.
-    // Convert it to base 36 (numbers + letters), and grab the first 9 characters
-    // after the decimal.
-    return '_' + Math.random().toString(36).substr(2, 9);
-  }
-
-  clearFile() {
-    this.addBannerForm.get('image').setValue(null);
-    this.fileInput.nativeElement.value = '';
-  }
-
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Http } from '@angular/http';
-import { FormGroup, FormControl, Validators, FormBuilder }  from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import { ClientService } from '../common/_services/client.service';
 import datatablesConfig from '../common/_configs/datatable-pt-br.config';
@@ -20,24 +19,24 @@ export class ClientComponent implements OnInit {
   private dtOptions: DataTables.Settings = {};
 
   public addClientForm: FormGroup;
-  private name = new FormControl("", Validators.required);
-  private lastName = new FormControl("", Validators.required);
-  private rg = new FormControl("", Validators.required);
-  private cpf = new FormControl("", Validators.required);
-  private maritalStatus = new FormControl("", Validators.required);
-  private sex = new FormControl("", Validators.required);
-  public address = new FormControl("", Validators.required);
-  private city = new FormControl("", Validators.required);
-  private state = new FormControl("", Validators.required);
-  private phone = new FormControl("", Validators.required);
-  private facebook = new FormControl("", Validators.required);
-  private email = new FormControl("", Validators.required);
-  private birthday = new FormControl("", Validators.required);
-  private info = new FormControl("", Validators.required);
+  private name = new FormControl('');
+  private lastName = new FormControl('');
+  private rg = new FormControl('');
+  private cpf = new FormControl('');
+  private maritalStatus = new FormControl('');
+  private sex = new FormControl('');
+  public address = new FormControl('');
+  private city = new FormControl('');
+  private state = new FormControl('');
+  private phone = new FormControl('');
+  private facebook = new FormControl('');
+  private email = new FormControl('');
+  private birthday = new FormControl('');
+  private info = new FormControl('');
 
-  private infoMsg = { body: "", type: "info"};
+  private infoMsg = { body: '', type: 'info'};
 
-  constructor(private http: Http,
+  constructor(
               private _clientService: ClientService,
               private formBuilder: FormBuilder) { }
 
@@ -75,10 +74,10 @@ export class ClientComponent implements OnInit {
   addClient() {
     this._clientService.add(this.addClientForm.value).subscribe(
       res => {
-        var newClient = res;
+        const newClient = res;
         this.clients.push(newClient);
         this.addClientForm.reset();
-        this.sendInfoMsg("Cliente adicionado com sucesso.", "success");
+        this.sendInfoMsg('Cliente adicionado com sucesso.', 'success');
       },
       error => console.log(error),
       () => this.getClients()
@@ -93,7 +92,7 @@ export class ClientComponent implements OnInit {
   cancelEditing() {
     this.isEditing = false;
     this.client = {};
-    this.sendInfoMsg("Edição de cliente cancelada.", "warning");
+    this.sendInfoMsg('Edição de cliente cancelada.', 'warning');
     this.getClients();
   }
 
@@ -102,19 +101,19 @@ export class ClientComponent implements OnInit {
       res => {
         this.isEditing = false;
         this.client = client;
-        this.sendInfoMsg("Cliente editado com sucesso.", "success");
+        this.sendInfoMsg('Cliente editado com sucesso.', 'success');
       },
       error => console.log(error)
     );
   }
 
   deleteClient(client) {
-    if(window.confirm("Tem certeza que quer deletar este cliente?")) {
+    if (window.confirm('Tem certeza que quer deletar este cliente?')) {
       this._clientService.remove(client).subscribe(
         res => {
-          var pos = this.clients.map(client => { return client.id }).indexOf(client.id);
+          const pos = this.clients.map(clientItem => clientItem.id).indexOf(client.id);
           this.clients.splice(pos, 1);
-          this.sendInfoMsg("Cliente deletado com sucesso.", "success");
+          this.sendInfoMsg('Cliente deletado com sucesso.', 'success');
         },
         error => console.log(error),
         () => this.getClients()
@@ -125,7 +124,7 @@ export class ClientComponent implements OnInit {
   sendInfoMsg(body, type, time = 3000) {
     this.infoMsg.body = body;
     this.infoMsg.type = type;
-    window.setTimeout(() => this.infoMsg.body = "", time);
+    window.setTimeout(() => this.infoMsg.body = '', time);
   }
 
 }

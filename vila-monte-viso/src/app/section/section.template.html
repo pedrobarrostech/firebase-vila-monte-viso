@@ -5,7 +5,7 @@
             <form [formGroup]="addSectionForm" (ngSubmit)="addSection()" >
                     <div class="form-group">
                         <label for="name">Nome</label>
-                        <input class="form-control" placeholder="Nome" name="name" formControlName="name" type="text" />          
+                        <input class="form-control" placeholder="Nome" name="name" formControlName="name" type="text" />
                     </div>
                     <div class="form-group">
                         <label for="image">Imagem</label>
@@ -48,7 +48,7 @@
                 <tbody *ngIf="!isEditing">
                     <tr *ngFor="let section of sections">
                     <td>{{section.name}}</td>
-                    <td align="center"><img src="{{ assetsUrl + section.image }}" width="50" /></td>
+                    <td align="center"><img src="{{ section.image }}" width="50" /></td>
                     <td align="center">
                         <button class="btn btn-sm btn-warning text-white" (click)="enableEditing(section)">
                             <i class="fa fa-pencil"></i>
@@ -57,7 +57,7 @@
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
-                    </tr>  
+                    </tr>
                 </tbody>
                 <tbody *ngIf="isEditing">
                     <tr>
@@ -70,21 +70,21 @@
                                 <div class="form-group">
                                     <label for="image">Imagem</label>
                                     <input class="form-control" type="file" name="image" placeholder="Imagem" (change)="onFileChange($event)" value="">
-                                    <button type="button" class="btn btn-sm btn-default" (click)="clearFile()">Remover arquivo</button>
+                                    <img src="{{ section.image }}" width="50" />
                                 </div>
                                 <div class="form-group">
                                     <label for="info">Informação</label>
-                                    <textarea class="form-control" name="info" [(ngModel)]="section.info" ></textarea>         
+                                    <textarea class="form-control" name="info" [(ngModel)]="section.info" ></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Descrição</label>
-                                    <textarea class="form-control" name="description" [(ngModel)]="section.description" ></textarea>         
+                                    <textarea class="form-control" name="description" [(ngModel)]="section.description" ></textarea>
                                 </div>
                                 <button class="btn btn-sm btn-primary" type="submit" [disabled]="!form.form.valid">
                                     <i class="fa fa-floppy-o"></i> Salvar
                                 </button>
                             </form>
-                            <button class="btn btn-sm btn-warning" (click)="cancelEditing()"><i class="fa fa-times"></i> Cancelar</button>  
+                            <button class="btn btn-sm btn-warning" (click)="cancelEditing()"><i class="fa fa-times"></i> Cancelar</button>
                         </td>
                     </tr>
                 </tbody>

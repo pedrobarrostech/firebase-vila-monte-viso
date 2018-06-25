@@ -1,6 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { Http } from '@angular/http';
-import { FormGroup, FormControl, Validators, FormBuilder }  from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import { ServiceService } from '../common/_services/service.service';
 import datatablesConfig from '../common/_configs/datatable-pt-br.config';
@@ -22,14 +21,14 @@ export class ServiceComponent implements OnInit {
   private serviceEditImage = {};
 
   public addServiceForm: FormGroup;
-  private name = new FormControl("", Validators.required);
-  private description = new FormControl("", Validators.required);
-  private link = new FormControl("", Validators.required);
-  private active = new FormControl("", Validators.required);
+  private name = new FormControl('', Validators.required);
+  private description = new FormControl('', Validators.required);
+  private link = new FormControl('', Validators.required);
+  private active = new FormControl('', Validators.required);
 
-  private infoMsg = { body: "", type: "info"};
+  private infoMsg = { body: '', type: 'info'};
 
-  constructor(private http: Http,
+  constructor(
               private _serviceService: ServiceService,
               private formBuilder: FormBuilder) { }
 
@@ -57,10 +56,10 @@ export class ServiceComponent implements OnInit {
   addService() {
     this._serviceService.add(this.addServiceForm.value).subscribe(
       res => {
-        var newService = res;
+        const newService = res;
         this.services.push(newService);
         this.addServiceForm.reset();
-        this.sendInfoMsg("Serviço adicionado com sucesso.", "success");
+        this.sendInfoMsg('Serviço adicionado com sucesso.', 'success');
       },
       error => console.log(error),
       () => this.getServices()
@@ -75,7 +74,7 @@ export class ServiceComponent implements OnInit {
   cancelEditing() {
     this.isEditing = false;
     this.service = {};
-    this.sendInfoMsg("Edição de serviço cancelada.", "warning");
+    this.sendInfoMsg('Edição de serviço cancelada.', 'warning');
     this.getServices();
   }
 
@@ -87,19 +86,19 @@ export class ServiceComponent implements OnInit {
         this.isEditing = false;
         service.image = `uploads/${service.image.filename}`;
         this.service = service;
-        this.sendInfoMsg("Serviço editado com sucesso.", "success");
+        this.sendInfoMsg('Serviço editado com sucesso.', 'success');
       },
       error => console.log(error)
     );
   }
 
   deleteService(service) {
-    if(window.confirm("Tem certeza que quer deletar este servicee?")) {
+    if (window.confirm('Tem certeza que quer deletar este servicee?')) {
       this._serviceService.remove(service).subscribe(
         res => {
-          var pos = this.services.map(service => { return service.id }).indexOf(service.id);
+          const pos = this.services.map(serviceItem => serviceItem.id).indexOf(service.id);
           this.services.splice(pos, 1);
-          this.sendInfoMsg("Serviço deletado com sucesso.", "success");
+          this.sendInfoMsg('Serviço deletado com sucesso.', 'success');
         },
         error => console.log(error),
         () => this.getServices()
@@ -110,7 +109,7 @@ export class ServiceComponent implements OnInit {
   sendInfoMsg(body, type, time = 3000) {
     this.infoMsg.body = body;
     this.infoMsg.type = type;
-    window.setTimeout(() => this.infoMsg.body = "", time);
+    window.setTimeout(() => this.infoMsg.body = '', time);
   }
 
 }

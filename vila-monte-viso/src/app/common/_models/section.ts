@@ -5,7 +5,7 @@ export class Section {
     public title?: string,
     public image?: string|any,
     public description?: string,
-    public info?: string) {             
+    public info?: string) {
   }
 
 }

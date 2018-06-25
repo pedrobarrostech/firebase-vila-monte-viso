@@ -14,7 +14,6 @@ export class Client {
     public phone?: string,
     public email?: string,
     public birthday?: string,
-    public info?: string) {             
+    public info?: string) {
   }
-
 }
