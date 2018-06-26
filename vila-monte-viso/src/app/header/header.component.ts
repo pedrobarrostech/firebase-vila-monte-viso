@@ -1,19 +1,43 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
-import { AuthenticationService } from '../common/_services/authentication.service';
+import * as firebase from 'firebase/app';
+import {Router} from '@angular/router';
+
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
   selector: 'app-header',
-  styleUrls: [ './header.style.css' ],
+  styleUrls: ['./header.style.css'],
   templateUrl: './header.template.html'
 })
-export class HeaderComponent  implements OnInit {
-    isLoggedIn$: Observable<boolean>;
-    constructor(private _authService: AuthenticationService) { }
+export class HeaderComponent implements OnInit {
+  user: Observable<firebase.User>;
+  private isLoggedIn: Boolean = false;
+  private email: String;
 
-    ngOnInit() {
-      this.isLoggedIn$ = this._authService.isLoggedIn;
+
+  constructor(public afAuth: AngularFireAuth, public router: Router) {
+    const status = localStorage.getItem('isLoggedIn');
+
+    if (status === 'true') {
+      this.isLoggedIn = true;
+    } else {
+      this.isLoggedIn = false;
     }
+
+  }
+
+  ngOnInit() {  }
+
+  logout() {
+    this.afAuth.auth.signOut();
+    this.isLoggedIn = false;
+    localStorage.setItem('isLoggedIn', 'false');
+    localStorage.setItem('currentUser', '');
+
+    this.router.navigate(['/login']);
+  }
+
 
 }

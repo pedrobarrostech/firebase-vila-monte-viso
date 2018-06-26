@@ -13,27 +13,27 @@ export class AuthenticationService {
     private url = environment.API_URL + 'auth/login';
     private headers = new HttpHeaders({ 'Content-Type': 'application/json',  'Access-Control-Allow-Origin': '*' });
     private options = { headers: this.headers };
-    private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private loggedIn = new BehaviorSubject<boolean>(false);
 
     private user: Observable<firebase.User>;
     private userDetails: firebase.User = null;
 
     constructor(private _firebaseAuth: AngularFireAuth, private router: Router, private _http: HttpClient) {
-      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      this.token = currentUser && currentUser.token;
+      // const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      // this.token = currentUser && currentUser.token;
 
-      this.user = _firebaseAuth.authState;
+      // this.user = _firebaseAuth.authState;
 
-      this.user.subscribe(
-        (user) => {
-          if (user) {
-            this.userDetails = user;
-            // console.log(this.userDetails);
-          } else {
-            this.userDetails = null;
-          }
-        }
-      );
+      // this.user.subscribe(
+      //   (user) => {
+      //     if (user) {
+      //       this.userDetails = user;
+      //       // console.log(this.userDetails);
+      //     } else {
+      //       this.userDetails = null;
+      //     }
+      //   }
+      // );
     }
 
     get isLoggedIn() {
@@ -50,7 +50,7 @@ export class AuthenticationService {
         const user = result.user;
         localStorage.setItem('currentUser', JSON.stringify({ username: user, token: token }));
         // this.token = token;
-        // this.loggedIn.next(true);
+        // this.loggedIn = true;
         return true;
         // ...
       }).catch(function(error) {
@@ -61,7 +61,7 @@ export class AuthenticationService {
         const email = error.email;
         // The firebase.auth.AuthCredential type that was used.
         const credential = error.credential;
-        // this.loggedIn.next(false);
+        // this.loggedIn = false;
         return false;
         // ...
       });

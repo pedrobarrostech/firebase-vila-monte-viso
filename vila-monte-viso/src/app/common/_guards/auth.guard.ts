@@ -5,17 +5,14 @@ import {
     RouterStateSnapshot,
     Router
 } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthenticationService } from '../_services/authentication.service';
-import { map, take } from 'rxjs/operators';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-    constructor(private router: Router, private _authenticationService: AuthenticationService) { }
+    constructor(private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-      if (localStorage.getItem('currentUser')) {
+      if (localStorage.getItem('isLoggedIn') == 'true') {
           // logged in so return true
           return true;
       }
