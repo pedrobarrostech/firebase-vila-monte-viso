@@ -3,6 +3,8 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { environment } from '../../environments/environment';
 import { ProductService } from '../common/_services/product.service';
 import datatablesConfig from '../common/_configs/datatable-pt-br.config';
+import { UploadService } from '../common/_services/upload.service';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-product',
@@ -41,6 +43,7 @@ export class ProductComponent implements OnInit {
       name: this.name,
       description: this.description,
       image: null,
+      imageRef: null,
       link: this.link,
       active: this.active
     });
@@ -93,8 +96,13 @@ export class ProductComponent implements OnInit {
     );
   }
 
-  deleteProduct(product) {
+  async deleteProduct(product) {
     if (window.confirm('Tem certeza que quer deletar este producte?')) {
+
+      const ref = firebase.storage().ref();
+      const storageRef = ref.child(product.imageRef);
+      await storageRef.delete();
+
       this._productService.remove(product).subscribe(
         res => {
           const pos = this.products.map(productItem => productItem.id).indexOf(product.id);
@@ -113,30 +121,24 @@ export class ProductComponent implements OnInit {
     window.setTimeout(() => this.infoMsg.body = '', time);
   }
 
-  onFileChange(event) {
-    const reader = new FileReader();
+  async onFileChange(event) {
     if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
       const file = event.target.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
-        this.addProductForm.get('image').setValue({
-          filename: file.name,
-          filetype: file.type,
-          value: reader.result.split(',')[1]
-        });
 
-        this.productEditImage = {
-          filename: file.name,
-          filetype: file.type,
-          value: reader.result.split(',')[1]
-        };
+        const filename = UploadService.generateId() + file.name;
+        const ref = firebase.storage().ref();
+        const storageRef = ref.child(filename);
+        storageRef.put(file).then((snapshot) => {
+          snapshot.ref.getDownloadURL().then((downloadURL) => {
+            this.addProductForm.get('image').setValue(downloadURL);
+            this.addProductForm.get('imageRef').setValue(filename);
+          });
+        });
       };
     }
-  }
-
-  clearFile() {
-    this.addProductForm.get('image').setValue(null);
-    this.fileInput.nativeElement.value = '';
   }
 
 }

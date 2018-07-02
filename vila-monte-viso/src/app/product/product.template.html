@@ -5,7 +5,7 @@
             <form [formGroup]="addProductForm" (ngSubmit)="addProduct()" >
                     <div class="form-group">
                         <label for="name">Nome</label>
-                        <input class="form-control" placeholder="Nome" name="name" formControlName="name" type="text" />          
+                        <input class="form-control" placeholder="Nome" name="name" formControlName="name" type="text" />
                     </div>
                     <div class="form-group">
                         <label for="image">Imagem</label>
@@ -17,7 +17,7 @@
                     </div>
                     <div class="form-group">
                         <label for="link">Link</label>
-                        <input class="form-control" placeholder="Link" name="link" formControlName="link" type="text" />          
+                        <input class="form-control" placeholder="Link" name="link" formControlName="link" type="text" />
                     </div>
                     <div class="form-group">
                         <label class="custom-control custom-radio">
@@ -60,7 +60,7 @@
                 <tbody *ngIf="!isEditing">
                     <tr *ngFor="let product of products">
                     <td>{{ product.name }}</td>
-                    <td align="center"><img src="{{ assetsUrl + product.image }}" width="50" /></td>
+                    <td align="center"><img src="{{ product.image }}" width="50" /></td>
                     <td align="center">{{product.active == 1 ? 'Sim': 'Não'}}</td>
                     <td align="center">
                         <button class="btn btn-sm btn-warning text-white" (click)="enableEditing(product)">
@@ -70,7 +70,7 @@
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
-                    </tr>  
+                    </tr>
                 </tbody>
                 <tbody *ngIf="isEditing">
                     <tr>
@@ -83,15 +83,15 @@
                             <div class="form-group">
                                 <label for="image">Imagem</label>
                                 <input class="form-control" type="file" name="image" placeholder="Imagem" (change)="onFileChange($event)" value="">
-                                <button type="button" class="btn btn-sm btn-default" (click)="clearFile()">Remover arquivo</button>
+                                <img src="{{ product.image }}" width="50" />
                             </div>
                             <div class="form-group">
                                 <label for="link">Link</label>
-                                <input class="form-control" type="text" placeholder="Link" name="link" [(ngModel)]="product.link" required/>          
+                                <input class="form-control" type="text" placeholder="Link" name="link" [(ngModel)]="product.link" required/>
                             </div>
                             <div class="form-group">
                                 <label for="description">Descrição</label>
-                                <textarea class="form-control" name="description" [(ngModel)]="product.description" required></textarea>         
+                                <textarea class="form-control" name="description" [(ngModel)]="product.description" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="custom-control custom-radio mt-4">
@@ -107,7 +107,7 @@
                                 <i class="fa fa-floppy-o"></i> Salvar
                             </button>
                         </form>
-                        <button class="btn btn-sm btn-warning" (click)="cancelEditing()"><i class="fa fa-times"></i> Cancelar</button> 
+                        <button class="btn btn-sm btn-warning" (click)="cancelEditing()"><i class="fa fa-times"></i> Cancelar</button>
                     </td>
                     </tr>
                 </tbody>
