@@ -13,7 +13,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 })
 export class HeaderComponent implements OnInit {
   user: Observable<firebase.User>;
-  private isLoggedIn: Boolean = false;
+  public isLoggedIn: Boolean = false;
   private email: String;
 
 

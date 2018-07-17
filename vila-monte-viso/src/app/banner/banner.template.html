@@ -38,8 +38,8 @@
     <div class="card-block">
         <div class="container">
             <div [hidden]="!infoMsg.body" class="alert alert-{{infoMsg.type}} alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <button type="button" class="close" data-dismiss="alert">
+                    <span>&times;</span>
                 </button>
                 {{infoMsg.body}}
             </div>
@@ -57,7 +57,7 @@
             <tbody *ngIf="!isEditing">
                 <tr *ngFor="let banner of banners">
                 <td>{{banner.name}}</td>
-                <td align="center"><img src="{{ banner.image }}" width="50" /></td>
+                <td align="center"><img src="{{ banner.image }}" alt="{{banner.name}}" width="50" /></td>
                 <td align="center">{{banner.order}}</td>
                 <td align="center">{{banner.active == 1 ? 'Sim': 'Não'}}</td>
                 <td align="center">

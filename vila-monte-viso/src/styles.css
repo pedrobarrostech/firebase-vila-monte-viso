@@ -30,3 +30,17 @@ label > input[type="search"], select {
 .custom-control {
     padding-left: 0.3rem;
 }
+
+.bg-primary {
+  background-color: #6610f2 !important;
+}
+
+.btn-primary {
+  background-color: #6610f2;
+  border-color: #6610f2;
+}
+
+.text-primary {
+  color: #6610f2 !important;
+}
+
